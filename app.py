@@ -175,6 +175,7 @@ def escolher_opcao():
 #*******************************************************************************************************
 # FUNÇÃO PRINCIPAL DO PROGRAMA
 def main():
+    carregar_dados()  # ⬅️ LINHA NOVA: Carrega dados ao iniciar
     limpar_tela()
     exibir_nome_programa()
     exibir_menu()
