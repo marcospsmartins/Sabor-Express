@@ -118,11 +118,13 @@ def listar_restaurantes():
     exibir_submenu("LISTA DE RESTAURANTES".center(50))
     
     if restaurantes:
-        print(f"\nTotal de restaurantes: {len(restaurantes)}\n")
+        print(f"\n🍽️  Total de restaurantes: {len(restaurantes)}\n")
         for idx, restaurante in enumerate(restaurantes, start=1):
             print(f"{idx:>2}. {restaurante}")
+        print(f"\n💾 Dados carregados de: {ARQUIVO_JSON}")
     else:
         print("\n📝 Nenhum restaurante cadastrado.")
+        print("💡 Use a opção 1 para cadastrar o primeiro restaurante!")
     
     voltar_menu_principal()
 
