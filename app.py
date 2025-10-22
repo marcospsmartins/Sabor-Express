@@ -1,11 +1,11 @@
 # IMPORTAÇÕES DE BIBLIOTECAS
 import os
-import json  # ⬅️ NOVA IMPORTAÇÃO
+import json  # NOVA IMPORTAÇÃO
 
 #*******************************************************************************************************
 # VARIÁVEIS GLOBAIS
-ARQUIVO_JSON = 'restaurantes.json'  # ⬅️ NOVA VARIÁVEL
-restaurantes = []  # ⬅️ AGORA COMEÇA VAZIA
+ARQUIVO_JSON = 'restaurantes.json'  # NOVA VARIÁVEL
+restaurantes = []  # AGORA COMEÇA VAZIA
 
 #*******************************************************************************************************
 # FUNÇÃO PARA CARREGAR DADOS DO JSON
@@ -37,14 +37,10 @@ def salvar_dados():
         print(f"❌ Erro ao salvar dados: {e}")
 
 #*******************************************************************************************************
-# VARIÁVEIS GLOBAIS
-restaurantes = ['Sabor do Nordeste', 'Pizzaria do João', 'Churrascaria do Gaúcho']
-
-#*******************************************************************************************************
 # FUNÇÃO PARA EXIBIR O NOME DO PROGRAMA
 def exibir_nome_programa():
     print("""
-    ░██████╗░█████╗░██████╗░░█████╗░██████╗░  ███████╗██╗░░██╗██████╗░██████╗░███████╗░██████╗░██████╗
+    ░██████╗░█████╗░██████╗░░█████╗░██████╗░  ███████╗██║░░██╗██████╗░██████╗░███████╗░██████╗░██████╗
     ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗  ██╔════╝╚██╗██╔╝██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝
     ╚█████╗░███████║██████╦╝██║░░██║██████╔╝  █████╗░░░╚███╔╝░██████╔╝██████╔╝█████╗░░╚█████╗░╚█████╗░
     ░╚═══██╗██╔══██║██╔══██╗██║░░██║██╔══██╗  ██╔══╝░░░██╔██╗░██╔═══╝░██╔══██╗██╔══╝░░░╚═══██╗░╚═══██╗
@@ -64,7 +60,9 @@ def exibir_menu():
 # FUNÇÃO PARA FINALIZAR O APP
 def finalizar_app():
     limpar_tela()
-    print("\nFinalizando o App.\n")
+    print("\n💾 Salvando dados antes de sair...")
+    salvar_dados()  # SALVA ANTES DE SAIR
+    print("👋 Finalizando o App.\n")
 
 #*******************************************************************************************************
 # FUNÇÃO PARA LIMPAR A TELA (REFATORADA)
@@ -74,7 +72,7 @@ def limpar_tela():
 #*******************************************************************************************************
 # FUNÇÃO PARA OPÇÃO INVÁLIDA
 def opcao_invalida():
-    print("\nOpção inválida. Tente novamente.\n")
+    print("\n❌ Opção inválida. Tente novamente.\n")
     input("Pressione Enter para continuar...")
     main()
 
@@ -107,7 +105,7 @@ def cadastrar_restaurante():
         print(f"\n⚠️  O restaurante '{nome_restaurante}' já está cadastrado!")
     else:
         restaurantes.append(nome_restaurante)
-        salvar_dados()  # ⬅️ LINHA NOVA: Salva no JSON
+        salvar_dados()  # SALVA NO JSON
         print(f"\n✅ Restaurante '{nome_restaurante}' cadastrado com sucesso!")
     
     voltar_menu_principal()
@@ -167,7 +165,9 @@ def escolher_opcao():
         elif opcao_escolhida == 3:
             ativar_restaurante()
         elif opcao_escolhida == 4:
-            print("\n👋 Saindo...")
+            print("\n💾 Salvando dados...")
+            salvar_dados()
+            print("👋 Saindo...")
             finalizar_app()
         else:
             opcao_invalida()
@@ -177,7 +177,7 @@ def escolher_opcao():
 #*******************************************************************************************************
 # FUNÇÃO PRINCIPAL DO PROGRAMA
 def main():
-    carregar_dados()  # ⬅️ LINHA NOVA: Carrega dados ao iniciar
+    carregar_dados()  # CARREGA DADOS AO INICIAR
     limpar_tela()
     exibir_nome_programa()
     exibir_menu()
