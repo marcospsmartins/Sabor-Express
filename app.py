@@ -8,6 +8,35 @@ ARQUIVO_JSON = 'restaurantes.json'  # ⬅️ NOVA VARIÁVEL
 restaurantes = []  # ⬅️ AGORA COMEÇA VAZIA
 
 #*******************************************************************************************************
+# FUNÇÃO PARA CARREGAR DADOS DO JSON
+def carregar_dados():
+    global restaurantes
+    try:
+        # Verifica se o arquivo existe
+        if os.path.exists(ARQUIVO_JSON):
+            with open(ARQUIVO_JSON, 'r', encoding='utf-8') as f:
+                restaurantes = json.load(f)
+            print(f"📂 Dados carregados: {len(restaurantes)} restaurantes")
+        else:
+            # Se o arquivo não existe, começa com dados de exemplo
+            restaurantes = ['Sabor do Nordeste', 'Pizzaria do João', 'Churrascaria do Gaúcho']
+            salvar_dados()  # Cria o arquivo com dados iniciais
+            print("📄 Arquivo de dados criado com restaurantes de exemplo")
+    except Exception as e:
+        print(f"❌ Erro ao carregar dados: {e}")
+        restaurantes = []  # Lista vazia em caso de erro
+
+#*******************************************************************************************************
+# FUNÇÃO PARA SALVAR DADOS NO JSON
+def salvar_dados():
+    try:
+        with open(ARQUIVO_JSON, 'w', encoding='utf-8') as f:
+            json.dump(restaurantes, f, indent=4, ensure_ascii=False)
+        print("💾 Dados salvos com sucesso!")
+    except Exception as e:
+        print(f"❌ Erro ao salvar dados: {e}")
+
+#*******************************************************************************************************
 # VARIÁVEIS GLOBAIS
 restaurantes = ['Sabor do Nordeste', 'Pizzaria do João', 'Churrascaria do Gaúcho']
 
