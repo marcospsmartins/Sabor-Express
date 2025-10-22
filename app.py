@@ -107,6 +107,7 @@ def cadastrar_restaurante():
         print(f"\n⚠️  O restaurante '{nome_restaurante}' já está cadastrado!")
     else:
         restaurantes.append(nome_restaurante)
+        salvar_dados()  # ⬅️ LINHA NOVA: Salva no JSON
         print(f"\n✅ Restaurante '{nome_restaurante}' cadastrado com sucesso!")
     
     voltar_menu_principal()
