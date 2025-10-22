@@ -1,5 +1,11 @@
 # IMPORTAÇÕES DE BIBLIOTECAS
 import os
+import json  # ⬅️ NOVA IMPORTAÇÃO
+
+#*******************************************************************************************************
+# VARIÁVEIS GLOBAIS
+ARQUIVO_JSON = 'restaurantes.json'  # ⬅️ NOVA VARIÁVEL
+restaurantes = []  # ⬅️ AGORA COMEÇA VAZIA
 
 #*******************************************************************************************************
 # VARIÁVEIS GLOBAIS
