@@ -1,75 +1,58 @@
-# Sabor-Express
-Cadastro de Resurantes
 🍽️ Sabor Express - Sistema de Gerenciamento de Restaurantes
 
-Um sistema simples e eficiente para gerenciamento de restaurantes desenvolvido em Python, perfeito para pequenos negócios e aprendizado de programação.
+https://img.shields.io/badge/Python-3.6+-blue.svg
+https://img.shields.io/badge/Status-Em%2520Desenvolvimento-green.svg
+https://img.shields.io/badge/License-MIT-yellow.svg
 
--------------------------------------------------------------------------------------------------
-📋 Índice
+Um sistema simples e eficiente para gerenciamento de restaurantes, desenvolvido em Python como projeto educacional.
 
-Visão Geral
-Funcionalidades
-Pré-requisitos
-Instalação
-Como Usar
-Estrutura do Projeto
-Tecnologias Utilizadas
-Contribuição
-Licença
-Roadmap
+***************************************************************************
+📋 Sobre o Projeto
 
--------------------------------------------------------------------------------------------------
-🎯 Visão Geral
-O Sabor Express é uma aplicação de console desenvolvida em Python que permite o gerenciamento básico de estabelecimentos gastronômicos. Ideal para donos de pequenos negócios ou para fins educacionais no aprendizado de Python.
+O Sabor Express é um programa de linha de comando (CLI) que permite cadastrar, listar e gerenciar restaurantes de forma prática e intuitiva. Ideal para quem está começando na programação e quer entender conceitos fundamentais.
 
--------------------------------------------------------------------------------------------------
+***************************************************************************
 ✨ Funcionalidades
-✅ Cadastro de Restaurantes - Adicione novos estabelecimentos ao sistema
-📋 Listagem Completa - Visualize todos os restaurantes cadastrados
-🟢 Ativação de Restaurantes - Simule a ativação de estabelecimentos
-🎨 Interface Amigável - Design clean com feedback visual intuitivo
-⚠️ Tratamento de Erros - Validações robustas para entradas inválidas
-🖥️ Compatibilidade Multiplataforma - Funciona em Windows, Linux e macOS
 
--------------------------------------------------------------------------------------------------
-🛠️ Pré-requisitos
-Python 3.6 ou superior
-Sistema operacional: Windows, Linux ou macOS
+🏪 Cadastro de Restaurantes - Adicione novos restaurantes à lista
+📋 Listagem Completa - Veja todos os restaurantes cadastrados
+✅ Ativação de Restaurantes - Ative restaurantes específicos
+🎨 Interface Amigável - Design visual atraente e fácil de usar
+♻️ Navegação Intuitiva - Fluxo simples entre as opções
 
--------------------------------------------------------------------------------------------------
-📥 Instalação
+***************************************************************************
+🛠️ Tecnologias Utilizadas
 
-*******************
-Método 1: Clone o repositório
-bash
-# Clone o repositório
+Python 3.6+ - Linguagem de programação
+Biblioteca OS - Para limpeza de tela entre sistemas
+Arte ASCII - Para título estilizado
+
+***************************************************************************
+🚀 Como Usar
+
+Pré-requisitos
+Python 3.6 ou superior instalado
+Terminal/Prompt de comando
+
+
+Execução
+Clone o repositório:
+
 git clone https://github.com/seu-usuario/sabor-express.git
+Acesse o diretório:
 
-# Acesse o diretório
 cd sabor-express
+Execute o programa:
 
-# Execute o programa
 python main.py
 
-*****************
-Método 2: Download direto
-Faça o download dos arquivos do projeto
-Extraia em uma pasta de sua preferência
-Execute o comando:
+***************************************************************************
+📖 Menu de Opções
 
-bash
-python sabor_express.py
+Ao executar o programa, você verá este menu:
 
--------------------------------------------------------------------------------------------------
-🚀 Como Usar
-Executando o Sistema
-bash
-python sabor_express.py
-
--------------------------------------------------------------------------------------------------
-Navegação no Menu
 text
-░██████╗░█████╗░██████╗░░█████╗░██████╗░  ███████╗██╗░░██╗██████╗░██████╗░███████╗░██████╗░██████╗
+░██████╗░█████╗░██████╗░░█████╗░██████╗░  ███████╗██║░░██╗██████╗░██████╗░███████╗░██████╗░██████╗
 ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗  ██╔════╝╚██╗██╔╝██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝
 ╚█████╗░███████║██████╦╝██║░░██║██████╔╝  █████╗░░░╚███╔╝░██████╔╝██████╔╝█████╗░░╚█████╗░╚█████╗░
 ░╚═══██╗██╔══██║██╔══██╗██║░░██║██╔══██╗  ██╔══╝░░░██╔██╗░██╔═══╝░██╔══██╗██╔══╝░░░╚═══██╗░╚═══██╗
@@ -81,118 +64,77 @@ text
 3. Ativar Restaurante
 4. Sair
 
--------------------------------------------------------------------------------------------------
-Fluxo de Trabalho
-Cadastrar Restaurante: Digite o nome do estabelecimento
-
-Listar Restaurantes: Veja todos os cadastrados com numeração
-
-Ativar Restaurante: Selecione pelo número para ativar
-
-Sair: Encerra o programa
-
-
--------------------------------------------------------------------------------------------------
-📁 Estrutura do Projeto
+***************************************************************************
+🎯 Estrutura do Projeto
 
 SABOR-EXPRESS/
-├── Sabor-Express/      # (provavelmente uma pasta)
-├── gitattributes/      
-├── LICENSE            # Arquivo de licença
-├── README.md          # Este arquivo
-├── app.py             # Seu código principal (não sabor_express.py)
+│
+├── 📄 app.py                 # Arquivo principal do programa
+├── 📄 README.md              # Este arquivo de documentação
+├── 📄 LICENSE                # Licença do projeto
+└── 📄 .gitattributes         # Descrição do projeto
 
+***************************************************************************
+🏗️ Arquitetura do Código
 
--------------------------------------------------------------------------------------------------
-🏗️ Estrutura de Código
+O programa está organizado em funções específicas:
+exibir_nome_programa() - Mostra o título estilizado
+exibir_menu() - Exibe as opções disponíveis
+cadastrar_restaurante() - Gerencia novo cadastro
+listar_restaurantes() - Mostra todos os cadastrados
+ativar_restaurante() - Ativa restaurantes específicos
+main() - Função principal que orquestra tudo
 
-***********************
-Principais Funções
-python
-# Navegação
-exibir_nome_programa()    # Banner inicial
-exibir_menu()             # Menu principal
-voltar_menu_principal()   # Navegação de retorno
+***************************************************************************
+📚 Conceitos de Programação Ensinados
 
-# Operações CRUD
-cadastrar_restaurante()   # Adiciona novos
-listar_restaurantes()     # Lista todos
-ativar_restaurante()      # Ativa específicos
+Este projeto é excelente para aprender:
 
-# Utilitários
-limpar_tela()             # Limpa terminal
-opcao_invalida()          # Trata erros
-finalizar_app()           # Encerra sistema
+✅ Estruturas de dados - Listas e arrays
+✅ Funções - Organização e reutilização de código
+✅ Controle de fluxo - If/else, loops
+✅ Tratamento de erros - Input validation
+✅ Interface de usuário - Design de CLI
+✅ Modularização - Código organizado em funções
 
-**********************
-Variáveis Globais
-python
-restaurantes = []  # Lista que armazena todos os restaurantes
+***************************************************************************
+🐛 Solução de Problemas
+Erros Comuns:
+"python: command not found"
+Solução: Instale o Python ou verifique se está no PATH
+Código para de responder
+Solução: Pressione Ctrl + C para interromper
+Tela não limpa corretamente
+Solução: O programa detecta automaticamente Windows/Linux
 
--------------------------------------------------------------------------------------------------
-🛠️ Tecnologias Utilizadas
-Python 3.6+ - Linguagem de programação
-Biblioteca OS - Operações do sistema
-Arte ASCII - Interface visual
-Tratamento de Exceções - Robustez do sistema
-
-*********************
-🤝 Contribuição
-Contribuições são sempre bem-vindas! Siga estos passos:
-
-Fork o projeto
-Crie uma branch para sua feature (git checkout -b feature/AmazingFeature)
+***************************************************************************
+🤝 Como Contribuir
+Contribuições são bem-vindas! Siga estos passos:
+Faça um Fork do projeto
+Crie uma Branch para sua Feature (git checkout -b feature/AmazingFeature)
 Commit suas mudanças (git commit -m 'Add some AmazingFeature')
-Push para a branch (git push origin feature/AmazingFeature)
+Push para a Branch (git push origin feature/AmazingFeature)
 Abra um Pull Request
 
-*********************
-Padrões de Código
-Use nomes descritivos para variáveis e funções
-Mantenha a consistência com o estilo existente
-Documente novas funcionalidades
-Teste suas alterações
+***************************************************************************
+📝 Próximas Funcionalidades
+Salvar dados em arquivo
+Categorizar restaurantes
+Sistema de avaliações
+Interface web
+Banco de dados
 
-********************
+***************************************************************************
+👨‍💻 Autor
+Desenvolvido como projeto educacional para o curso de Python Alura
+
+***************************************************************************
 📄 Licença
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para detalhes.
 
-*******************
-🗺️ Roadmap
-Versão 1.1 (Próxima)
-Persistência em arquivo JSON
-Edição de restaurantes
-Exclusão de restaurantes
-Sistema de categorias
-
-Versão 1.2 (Futuro)
-Interface gráfica (Tkinter)
-Sistema de avaliações
-Exportação de relatórios
-Busca e filtros
-
-Versão 2.0 (Longo Prazo)
-API REST
-Frontend web
-Banco de dados SQL
-Sistema de usuários
-
-🐛 Reportar Bugs
-Encontrou um bug? Por favor, abra uma issue incluindo:
-Descrição detalhada do problema
-Passos para reproduzir
-Comportamento esperado vs atual
-Screenshots (se aplicável)
-
-📞 Suporte
-Tem dúvidas ou sugestões? Entre em contato:
-📧 Email: seu-email@dominio.com
-💬 Issues: GitHub Issues
-👨‍💻 Desenvolvedor: Marcos Paulo Sunto Martins
-
-GitHub: @seu-usuario
-LinkedIn: Seu Perfil
+***************************************************************************
+⭐ Se este projeto te ajudou, deixe uma estrela no repositório!
 
 <div align="center">
-⭐️ Se este projeto te ajudou, considere dar uma estrela!
+💡 Dica: Este código é perfeito para iniciantes entenderem conceitos fundamentais de programação!
 </div>
