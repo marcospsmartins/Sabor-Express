@@ -1,12 +1,33 @@
 # IMPORTAÇÕES DE BIBLIOTECAS
 import os
 import json
+from datetime import datetime
 
 #*******************************************************************************************************
 # VARIÁVEIS GLOBAIS
 ARQUIVO_JSON = 'restaurantes.json'
-restaurantes = []  # AGORA SERÁ UMA LISTA DE DICIONÁRIOS
+restaurantes = []  # LISTA DE DICIONÁRIOS COM AVALIAÇÕES
 CATEGORIAS = ['Italiana', 'Japonesa', 'Brasileira', 'Mexicana', 'Chinesa', 'Árabe', 'Fast Food', 'Vegetariana', 'Frutos do Mar', 'Café', 'Outra']
+
+#*******************************************************************************************************
+# FUNÇÃO PARA CALCULAR MÉDIA DE AVALIAÇÕES
+def calcular_media_avaliacoes(restaurante):
+    if not restaurante['avaliacoes']:
+        return 0
+    total = sum(avaliacao['nota'] for avaliacao in restaurante['avaliacoes'])
+    return round(total / len(restaurante['avaliacoes']), 1)
+
+#*******************************************************************************************************
+# FUNÇÃO PARA EXIBIR ESTRELAS
+def exibir_estrelas(nota):
+    estrelas_cheias = '★' * int(nota)
+    estrelas_vazias = '☆' * (5 - int(nota))
+    return f"{estrelas_cheias}{estrelas_vazias} ({nota}/5)"
+
+#*******************************************************************************************************
+# FUNÇÃO PARA OBTER DATA ATUAL
+def obter_data_atual():
+    return datetime.now().strftime("%Y-%m-%d")
 
 #*******************************************************************************************************
 # FUNÇÃO PARA MIGRAR DA ESTRUTURA ANTIGA PARA A NOVA
@@ -17,7 +38,8 @@ def migrar_para_nova_estrutura(lista_antiga):
         novo_restaurante = {
             'nome': nome,
             'categoria': 'Brasileira',  # Categoria padrão
-            'ativo': True  # Todos ativos por padrão na migração
+            'ativo': True,  # Todos ativos por padrão na migração
+            'avaliacoes': []  # NOVO: Lista vazia de avaliações
         }
         nova_lista.append(novo_restaurante)
     return nova_lista
@@ -45,9 +67,34 @@ def carregar_dados():
         else:
             # Se o arquivo não existe, começa com dados de exemplo na NOVA estrutura
             restaurantes = [
-                {'nome': 'Sabor do Nordeste', 'categoria': 'Brasileira', 'ativo': True},
-                {'nome': 'Pizzaria do João', 'categoria': 'Italiana', 'ativo': False},
-                {'nome': 'Churrascaria do Gaúcho', 'categoria': 'Brasileira', 'ativo': True}
+                {
+                    'nome': 'Sabor do Nordeste', 
+                    'categoria': 'Brasileira', 
+                    'ativo': True,
+                    'avaliacoes': [
+                        {'nota': 5, 'comentario': 'Comida maravilhosa! Atendimento excelente.', 'data': '2024-01-15'},
+                        {'nota': 4, 'comentario': 'Bom atendimento, comida saborosa.', 'data': '2024-01-20'}
+                    ]
+                },
+                {
+                    'nome': 'Pizzaria do João', 
+                    'categoria': 'Italiana', 
+                    'ativo': False,
+                    'avaliacoes': [
+                        {'nota': 3, 'comentario': 'Pizza ok, mas demorou muito.', 'data': '2024-01-10'},
+                        {'nota': 2, 'comentario': 'Massa muito grossa, não gostei.', 'data': '2024-01-08'}
+                    ]
+                },
+                {
+                    'nome': 'Churrascaria do Gaúcho', 
+                    'categoria': 'Brasileira', 
+                    'ativo': True,
+                    'avaliacoes': [
+                        {'nota': 5, 'comentario': 'Melhor churrasco da cidade!', 'data': '2024-01-18'},
+                        {'nota': 4, 'comentario': 'Carnes de qualidade, preço justo.', 'data': '2024-01-12'},
+                        {'nota': 5, 'comentario': 'Rodízio completo, vale cada centavo.', 'data': '2024-01-05'}
+                    ]
+                }
             ]
             salvar_dados()
             print("📄 Arquivo de dados criado com restaurantes de exemplo (nova estrutura)")
@@ -83,8 +130,10 @@ def exibir_menu():
     print("1. Cadastrar Restaurante")
     print("2. Listar Restaurantes")
     print("3. Listar por Categoria")
-    print("4. Ativar/Desativar Restaurante")
-    print("5. Sair\n")
+    print("4. Avaliar Restaurante")
+    print("5. Ver Reviews")
+    print("6. Ativar/Desativar Restaurante")
+    print("7. Sair\n")
 
 #*******************************************************************************************************
 # FUNÇÃO PARA FINALIZAR O APP
@@ -160,7 +209,8 @@ def cadastrar_restaurante():
     novo_restaurante = {
         'nome': nome_restaurante,
         'categoria': categoria_escolhida,
-        'ativo': False  # Novo restaurante começa inativo
+        'ativo': False,  # Novo restaurante começa inativo
+        'avaliacoes': []  # Lista vazia de avaliações
     }
     
     restaurantes.append(novo_restaurante)
@@ -192,9 +242,14 @@ def listar_restaurantes():
         
         for idx, restaurante in enumerate(restaurantes, start=1):
             status = "✅ ATIVO" if restaurante['ativo'] else "❌ INATIVO"
+            media = calcular_media_avaliacoes(restaurante)
+            total_avaliacoes = len(restaurante['avaliacoes'])
+            
             print(f"{idx:>2}. {restaurante['nome']}")
             print(f"    📍 Categoria: {restaurante['categoria']}")
-            print(f"    🚀 Status: {status}\n")
+            print(f"    🚀 Status: {status}")
+            print(f"    ⭐ Avaliação: {exibir_estrelas(media)}")
+            print(f"    📝 Reviews: {total_avaliacoes} avaliação(ões)\n")
             
     else:
         print("\n📝 Nenhum restaurante cadastrado.")
@@ -234,16 +289,153 @@ def listar_por_categoria():
             if restaurantes_ativos:
                 print("✅ RESTAURANTES ATIVOS:")
                 for idx, restaurante in enumerate(restaurantes_ativos, start=1):
-                    print(f"   {idx}. {restaurante['nome']}")
+                    media = calcular_media_avaliacoes(restaurante)
+                    print(f"   {idx}. {restaurante['nome']} ⭐ {exibir_estrelas(media)}")
             
             restaurantes_inativos = [r for r in restaurantes_categoria if not r['ativo']]
             if restaurantes_inativos:
                 print("\n❌ RESTAURANTES INATIVOS:")
                 for idx, restaurante in enumerate(restaurantes_inativos, start=1):
-                    print(f"   {idx}. {restaurante['nome']}")
+                    media = calcular_media_avaliacoes(restaurante)
+                    print(f"   {idx}. {restaurante['nome']} ⭐ {exibir_estrelas(media)}")
             
             if not restaurantes_categoria:
                 print("📝 Nenhum restaurante nesta categoria.")
+                
+        else:
+            print("❌ Opção inválida.")
+    except ValueError:
+        print("❌ Entrada inválida.")
+    
+    voltar_menu_principal()
+
+#*******************************************************************************************************
+# FUNÇÃO PARA AVALIAR RESTAURANTE
+def avaliar_restaurante():
+    exibir_submenu("AVALIAR RESTAURANTE".center(50))
+    
+    if not restaurantes:
+        print("\n📝 Nenhum restaurante cadastrado para avaliar.")
+        voltar_menu_principal()
+        return
+    
+    # Mostra apenas restaurantes ativos para avaliação
+    restaurantes_ativos = [r for r in restaurantes if r['ativo']]
+    
+    if not restaurantes_ativos:
+        print("\n❌ Nenhum restaurante ativo para avaliar.")
+        print("💡 Ative um restaurante primeiro no menu principal.")
+        voltar_menu_principal()
+        return
+    
+    print("\n🏆 Restaurantes ativos disponíveis para avaliação:\n")
+    for idx, restaurante in enumerate(restaurantes_ativos, start=1):
+        media = calcular_media_avaliacoes(restaurante)
+        total_avaliacoes = len(restaurante['avaliacoes'])
+        print(f"{idx:>2}. {restaurante['nome']} - {restaurante['categoria']}")
+        print(f"    ⭐ {exibir_estrelas(media)} | 📝 {total_avaliacoes} reviews\n")
+    
+    try:
+        escolha = int(input(f"Escolha o restaurante para avaliar (1-{len(restaurantes_ativos)}): "))
+        if 1 <= escolha <= len(restaurantes_ativos):
+            restaurante_selecionado = restaurantes_ativos[escolha - 1]
+            
+            print(f"\n🎯 Avaliando: {restaurante_selecionado['nome']}")
+            print("\n📊 Escala de notas:")
+            print("1 ★ - Péssimo")
+            print("2 ★★ - Ruim") 
+            print("3 ★★★ - Regular")
+            print("4 ★★★★ - Bom")
+            print("5 ★★★★★ - Excelente")
+            
+            # Solicita nota
+            try:
+                nota = int(input("\nDigite sua nota (1-5): "))
+                if nota < 1 or nota > 5:
+                    print("❌ Nota deve ser entre 1 e 5.")
+                    voltar_menu_principal()
+                    return
+            except ValueError:
+                print("❌ Digite apenas números de 1 a 5.")
+                voltar_menu_principal()
+                return
+            
+            # Solicita comentário
+            comentario = input("\n💬 Deixe um comentário (opcional): ").strip()
+            
+            # Cria a avaliação
+            nova_avaliacao = {
+                'nota': nota,
+                'comentario': comentario if comentario else "Sem comentário",
+                'data': obter_data_atual()
+            }
+            
+            # Adiciona ao restaurante
+            for restaurante in restaurantes:
+                if restaurante['nome'] == restaurante_selecionado['nome']:
+                    restaurante['avaliacoes'].append(nova_avaliacao)
+                    salvar_dados()
+                    
+                    print(f"\n✅ Avaliação registrada com sucesso!")
+                    print(f"⭐ Nota: {exibir_estrelas(nota)}")
+                    print(f"💬 Comentário: {nova_avaliacao['comentario']}")
+                    print(f"📅 Data: {nova_avaliacao['data']}")
+                    break
+                    
+        else:
+            print(f"❌ Número inválido. Escolha entre 1 e {len(restaurantes_ativos)}.")
+    except ValueError:
+        print("❌ Erro: Digite apenas números!")
+    
+    voltar_menu_principal()
+
+#*******************************************************************************************************
+# FUNÇÃO PARA VER REVIEWS DE UM RESTAURANTE
+def ver_reviews_restaurante():
+    exibir_submenu("REVIEWS DOS RESTAURANTES".center(50))
+    
+    if not restaurantes:
+        print("\n📝 Nenhum restaurante cadastrado.")
+        voltar_menu_principal()
+        return
+    
+    print("\n📋 Escolha um restaurante para ver os reviews:\n")
+    for idx, restaurante in enumerate(restaurantes, start=1):
+        media = calcular_media_avaliacoes(restaurante)
+        total_avaliacoes = len(restaurante['avaliacoes'])
+        status = "✅" if restaurante['ativo'] else "❌"
+        
+        print(f"{idx:>2}. {status} {restaurante['nome']} - {restaurante['categoria']}")
+        print(f"    ⭐ {exibir_estrelas(media)} | 📝 {total_avaliacoes} reviews")
+    
+    try:
+        escolha = int(input(f"\nEscolha o restaurante (1-{len(restaurantes)}): "))
+        if 1 <= escolha <= len(restaurantes):
+            restaurante_selecionado = restaurantes[escolha - 1]
+            
+            print(f"\n" + "="*60)
+            print(f"🏆 {restaurante_selecionado['nome']}")
+            print(f"📍 {restaurante_selecionado['categoria']}")
+            print("="*60)
+            
+            media = calcular_media_avaliacoes(restaurante_selecionado)
+            total_avaliacoes = len(restaurante_selecionado['avaliacoes'])
+            
+            print(f"\n⭐ AVALIAÇÃO GERAL: {exibir_estrelas(media)}")
+            print(f"📊 Total de reviews: {total_avaliacoes}")
+            
+            if restaurante_selecionado['avaliacoes']:
+                print(f"\n📝 ÚLTIMAS AVALIAÇÕES:\n")
+                # Mostra as últimas 10 avaliações (mais recentes primeiro)
+                avaliacoes_ordenadas = sorted(restaurante_selecionado['avaliacoes'], key=lambda x: x['data'], reverse=True)
+                
+                for idx, avaliacao in enumerate(avaliacoes_ordenadas[:10], start=1):
+                    print(f"{idx:>2}. {exibir_estrelas(avaliacao['nota'])}")
+                    print(f"   💬 {avaliacao['comentario']}")
+                    print(f"   📅 {avaliacao['data']}\n")
+            else:
+                print(f"\n📝 Este restaurante ainda não possui avaliações.")
+                print("💡 Seja o primeiro a avaliar!")
                 
         else:
             print("❌ Opção inválida.")
@@ -273,7 +465,8 @@ def ativar_restaurante():
     if restaurantes_inativos:
         print("❌ RESTAURANTES INATIVOS (para ativar):")
         for restaurante in restaurantes_inativos:
-            print(f"{idx_global:>2}. {restaurante['nome']} - {restaurante['categoria']}")
+            media = calcular_media_avaliacoes(restaurante)
+            print(f"{idx_global:>2}. {restaurante['nome']} - {restaurante['categoria']} ⭐ {exibir_estrelas(media)}")
             idx_global += 1
         print()
     
@@ -281,7 +474,8 @@ def ativar_restaurante():
     if restaurantes_ativos:
         print("✅ RESTAURANTES ATIVOS (para desativar):")
         for restaurante in restaurantes_ativos:
-            print(f"{idx_global:>2}. {restaurante['nome']} - {restaurante['categoria']}")
+            media = calcular_media_avaliacoes(restaurante)
+            print(f"{idx_global:>2}. {restaurante['nome']} - {restaurante['categoria']} ⭐ {exibir_estrelas(media)}")
             idx_global += 1
         print()
     
@@ -322,8 +516,12 @@ def escolher_opcao():
         elif opcao_escolhida == 3:
             listar_por_categoria()
         elif opcao_escolhida == 4:
-            ativar_restaurante()
+            avaliar_restaurante()
         elif opcao_escolhida == 5:
+            ver_reviews_restaurante()
+        elif opcao_escolhida == 6:
+            ativar_restaurante()
+        elif opcao_escolhida == 7:
             print("\n💾 Salvando dados...")
             salvar_dados()
             print("👋 Saindo...")
