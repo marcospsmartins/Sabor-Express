@@ -12,7 +12,8 @@ CATEGORIAS = ['Italiana', 'Japonesa', 'Brasileira', 'Mexicana', 'Chinesa', 'Ára
 #*******************************************************************************************************
 # FUNÇÃO PARA CALCULAR MÉDIA DE AVALIAÇÕES
 def calcular_media_avaliacoes(restaurante):
-    if not restaurante['avaliacoes']:
+    # Verifica se a chave 'avaliacoes' existe e não está vazia
+    if 'avaliacoes' not in restaurante or not restaurante['avaliacoes']:
         return 0
     total = sum(avaliacao['nota'] for avaliacao in restaurante['avaliacoes'])
     return round(total / len(restaurante['avaliacoes']), 1)
@@ -28,6 +29,23 @@ def exibir_estrelas(nota):
 # FUNÇÃO PARA OBTER DATA ATUAL
 def obter_data_atual():
     return datetime.now().strftime("%Y-%m-%d")
+
+#*******************************************************************************************************
+# FUNÇÃO PARA VERIFICAR E CORRIGIR ESTRUTURA DE DADOS
+def verificar_e_corrigir_dados():
+    global restaurantes
+    corrigidos = 0
+    
+    for restaurante in restaurantes:
+        # Verifica se tem a chave 'avaliacoes'
+        if 'avaliacoes' not in restaurante:
+            restaurante['avaliacoes'] = []
+            corrigidos += 1
+            print(f"🔧 Corrigido: Adicionada chave 'avaliacoes' para {restaurante['nome']}")
+    
+    if corrigidos > 0:
+        salvar_dados()  # Salva as correções
+        print(f"✅ Estrutura de dados corrigida para {corrigidos} restaurante(s)")
 
 #*******************************************************************************************************
 # FUNÇÃO PARA MIGRAR DA ESTRUTURA ANTIGA PARA A NOVA
@@ -58,6 +76,8 @@ def carregar_dados():
             if dados and isinstance(dados[0], dict):
                 # Já está na nova estrutura
                 restaurantes = dados
+                # NOVO: Verifica e corrige a estrutura
+                verificar_e_corrigir_dados()
             else:
                 # Migra da estrutura antiga para a nova
                 restaurantes = migrar_para_nova_estrutura(dados)
@@ -205,12 +225,12 @@ def cadastrar_restaurante():
         print("❌ Entrada inválida. Usando categoria padrão 'Brasileira'.")
         categoria_escolhida = 'Brasileira'
     
-    # Cria o novo restaurante
+    # Cria o novo restaurante (GARANTINDO que tem 'avaliacoes')
     novo_restaurante = {
         'nome': nome_restaurante,
         'categoria': categoria_escolhida,
-        'ativo': False,  # Novo restaurante começa inativo
-        'avaliacoes': []  # Lista vazia de avaliações
+        'ativo': False,
+        'avaliacoes': []  # ⬅️ SEMPRE inclui a lista vazia
     }
     
     restaurantes.append(novo_restaurante)
@@ -243,7 +263,7 @@ def listar_restaurantes():
         for idx, restaurante in enumerate(restaurantes, start=1):
             status = "✅ ATIVO" if restaurante['ativo'] else "❌ INATIVO"
             media = calcular_media_avaliacoes(restaurante)
-            total_avaliacoes = len(restaurante['avaliacoes'])
+            total_avaliacoes = len(restaurante.get('avaliacoes', []))
             
             print(f"{idx:>2}. {restaurante['nome']}")
             print(f"    📍 Categoria: {restaurante['categoria']}")
@@ -331,7 +351,7 @@ def avaliar_restaurante():
     print("\n🏆 Restaurantes ativos disponíveis para avaliação:\n")
     for idx, restaurante in enumerate(restaurantes_ativos, start=1):
         media = calcular_media_avaliacoes(restaurante)
-        total_avaliacoes = len(restaurante['avaliacoes'])
+        total_avaliacoes = len(restaurante.get('avaliacoes', []))
         print(f"{idx:>2}. {restaurante['nome']} - {restaurante['categoria']}")
         print(f"    ⭐ {exibir_estrelas(media)} | 📝 {total_avaliacoes} reviews\n")
     
@@ -402,7 +422,8 @@ def ver_reviews_restaurante():
     print("\n📋 Escolha um restaurante para ver os reviews:\n")
     for idx, restaurante in enumerate(restaurantes, start=1):
         media = calcular_media_avaliacoes(restaurante)
-        total_avaliacoes = len(restaurante['avaliacoes'])
+        # CORREÇÃO: Verifica se a chave existe
+        total_avaliacoes = len(restaurante.get('avaliacoes', []))
         status = "✅" if restaurante['ativo'] else "❌"
         
         print(f"{idx:>2}. {status} {restaurante['nome']} - {restaurante['categoria']}")
@@ -419,15 +440,18 @@ def ver_reviews_restaurante():
             print("="*60)
             
             media = calcular_media_avaliacoes(restaurante_selecionado)
-            total_avaliacoes = len(restaurante_selecionado['avaliacoes'])
+            # CORREÇÃO: Usa get() para evitar KeyError
+            total_avaliacoes = len(restaurante_selecionado.get('avaliacoes', []))
             
             print(f"\n⭐ AVALIAÇÃO GERAL: {exibir_estrelas(media)}")
             print(f"📊 Total de reviews: {total_avaliacoes}")
             
-            if restaurante_selecionado['avaliacoes']:
+            # CORREÇÃO: Verifica se existe e não está vazia
+            avaliacoes = restaurante_selecionado.get('avaliacoes', [])
+            if avaliacoes:
                 print(f"\n📝 ÚLTIMAS AVALIAÇÕES:\n")
                 # Mostra as últimas 10 avaliações (mais recentes primeiro)
-                avaliacoes_ordenadas = sorted(restaurante_selecionado['avaliacoes'], key=lambda x: x['data'], reverse=True)
+                avaliacoes_ordenadas = sorted(avaliacoes, key=lambda x: x['data'], reverse=True)
                 
                 for idx, avaliacao in enumerate(avaliacoes_ordenadas[:10], start=1):
                     print(f"{idx:>2}. {exibir_estrelas(avaliacao['nota'])}")
